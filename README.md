@@ -4,6 +4,9 @@
   - [Introduction](#introduction)
   - [Documentation](#documentation)
   - [Architecture](#architecture)
+    - [Data Model](#data-model)
+    - [Operations](#operations)
+    - [Authentication](#authentication)
   - [Environment](#environment)
     - [Local environment](#local-environment)
     - [Remote environment](#remote-environment)
@@ -17,15 +20,41 @@ Redfish provides a standard specification for protocols, data model and behavior
 
 ## Documentation
 
-[Redfish Developer Hub](https://redfish.dmtf.org/)
-[Hello Redfish, Goodbye IPMI](https://www.thomas-krenn.com/de/tkmag/wp-content/uploads/2016/03/Werner_Fischer_-_Hello_Redfish__Goodbye_IPMI.pdf)
-[HPE iLO RESTful API](https://developer.hpe.com/platform/ilo-restful-api/home/)
-[HPE iLO REST API Docs](https://hewlettpackard.github.io/ilo-rest-api-docs/)
+- [Redfish Developer Hub](https://redfish.dmtf.org/)
+- [Hello Redfish, Goodbye IPMI](https://www.thomas-krenn.com/de/tkmag/wp-content/uploads/2016/03/Werner_Fischer_-_Hello_Redfish__Goodbye_IPMI.pdf)
+- [HPE iLO RESTful API](https://developer.hpe.com/platform/ilo-restful-api/home/)
+- [HPE iLO REST API Docs](https://hewlettpackard.github.io/ilo-rest-api-docs/)
 
 
 ## Architecture
 
 Redfish secures communication between client and server using HTTPS. It provides a REST API interface and works with JSON data structures. It provides ODATA which is a schema-backed data model. It was designed to be easily implemented on existing server firmware.
+
+
+### Data Model
+
+The Data Model is composed of base URL `/redfish/v1` which defines the object root and version and several child collections that each definitiona different portion of equipment such as `Systems`, `Chassis` and `Managers`.
+
+Collections often have child objects of their own, for example `Systems` include one or more Members, for example `Systems/437XR1138R2` which include subitems `Processor`, `BootOrder`, `SerialNumber`.
+
+### Operations
+
+In a typical Redfish client server environment a client sends a HTTP GET or POST request targeting a specific resource URL and server responds with JSON formatted data.
+
+Redfish Operations include the following HTTP methods:
+- **GET** - View data
+- **POST** - Create resource or initiate an action
+- **DELETE** - Remove resource
+- **PATCH** - Change property of resource
+- **PUT** - Replace resource
+
+### Authentication
+
+Redfish supports **HTTP Basic Authentication** defined in [RFC2617](https://tools.ietf.org/html/rfc2617). This method sends username and password with each request.
+
+Another way is to use **Session Based Authentication**. This method works by initializing a session by sending username and password to session URI `/redfish/v1/SessionService/Sessions`. Once authenticated, a session token value is included in response header `X-Auth-Token`. This value is then used in all subsequent requests. To close session you need to perform a DELETE operation on the Session resource. 
+
+*Note: Session Resource URL is included in the authentication response header under Location value. It can be also retrieved from session list*
 
 
 ## Environment
