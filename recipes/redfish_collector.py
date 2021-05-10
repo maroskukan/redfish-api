@@ -4,11 +4,24 @@ import sys
 
 
 def SystemCollector(url, filter):
-    # Retrieve Systems collection url
+    """Gets URL of Redfish compatible system and keys defined as filter list.
+    Returns a collection of systems with keys and their values.
+
+    Args:
+        url (str): Redfish Universal Resource Locator. Can contain FQDN or IP address with
+        or without port information. For example 'http://localhost:8000'
+        filter (list): List containing items that define individual keys that will be retrieved
+        from system tree. For example ['Id', 'HostName', 'SerialNumber']
+    
+    Returns:
+        collection (list): Each item in list contains dictionary that defines a system and its
+        properties. For example. [{'Id': '437XR1138R2', 'HostName': 'web483', 'SerialNumber': '437XR1138R2'}]
+    """
+    # Create Redfish Base URL
     base_path = url + '/redfish/v1'
     # Retrieve Systems collection url
     systems_path = request("GET",base_path, verify=False).json()['Systems']['@odata.id']
-    # Retrieve Members from System collection
+    # Retrieve Members from System collection path
     system_members = request("GET", url+systems_path, verify=False).json()['Members']
     collection = []
     for system_member in system_members:
@@ -44,7 +57,8 @@ def main():
     PowerState
     '''.split()
 
-    collection = SystemCollector(url, filter) 
+    collection = SystemCollector(url, filter)
+    print(collection)
     TablePrinter(collection)
 
 
