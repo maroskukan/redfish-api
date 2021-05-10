@@ -21,6 +21,7 @@ Redfish provides a standard specification for protocols, data model and behavior
 ## Documentation
 
 - [Redfish Developer Hub](https://redfish.dmtf.org/)
+- [Redfish Mockups Bundles](https://www.dmtf.org/dsp/DSP2043)
 - [Hello Redfish, Goodbye IPMI](https://www.thomas-krenn.com/de/tkmag/wp-content/uploads/2016/03/Werner_Fischer_-_Hello_Redfish__Goodbye_IPMI.pdf)
 - [HPE iLO RESTful API](https://developer.hpe.com/platform/ilo-restful-api/home/)
 - [HPE iLO REST API Docs](https://hewlettpackard.github.io/ilo-rest-api-docs/)

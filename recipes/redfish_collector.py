@@ -48,6 +48,8 @@ def TablePrinter(collection):
 
 def main():
     url = 'http://localhost:8000'
+    
+    # Example filter for public-rackmount1
     filter = '''
     Id
     HostName
@@ -56,9 +58,14 @@ def main():
     Description
     PowerState
     '''.split()
+    # # Example filter for public-bladed
+    # filter = '''
+    # Id
+    # Manufacturer
+    # '''.split()
 
     collection = SystemCollector(url, filter)
-    print(collection)
+
     TablePrinter(collection)
 
 
