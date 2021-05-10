@@ -2,30 +2,19 @@ from prettytable import PrettyTable
 from requests import request
 import sys
 
-url = 'http://localhost:8000' 
-base_path = url + '/redfish/v1'
-collection = []
 
-# Retrieve Systems collection url
-systems_path = request("GET",base_path, verify=False).json()['Systems']['@odata.id']
-
-# Retrieve Members from System collection
-system_members = request("GET", url+systems_path, verify=False).json()['Members']
-
-# Retrieve subitem from each Member
-def Collector(system_members):
+def SystemCollector(url, filter):
+    # Retrieve Systems collection url
+    base_path = url + '/redfish/v1'
+    # Retrieve Systems collection url
+    systems_path = request("GET",base_path, verify=False).json()['Systems']['@odata.id']
+    # Retrieve Members from System collection
+    system_members = request("GET", url+systems_path, verify=False).json()['Members']
     collection = []
     for system_member in system_members:
         system_member_path = system_member['@odata.id']
         subitems = request("GET", url+system_member_path, verify=False).json()
-        filter = '''
-        Id
-        HostName
-        AssetTag
-        SerialNumber
-        Description
-        PowerState
-        '''.split()
+
         member = {}
         for item in filter:
             member[str(item)] = subitems[item]
@@ -45,7 +34,17 @@ def TablePrinter(collection):
         
 
 def main():
-    collection = Collector(system_members) 
+    url = 'http://localhost:8000'
+    filter = '''
+    Id
+    HostName
+    AssetTag
+    SerialNumber
+    Description
+    PowerState
+    '''.split()
+
+    collection = SystemCollector(url, filter) 
     TablePrinter(collection)
 
 
